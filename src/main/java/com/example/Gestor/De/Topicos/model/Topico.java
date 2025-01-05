@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table(name = "topicos")
 @Entity(name = "Topico")
@@ -40,6 +41,5 @@ public class Topico {
 
         @OneToMany(mappedBy = "topico")
         private List<Respuesta> respuestas;
-}
 
     }
