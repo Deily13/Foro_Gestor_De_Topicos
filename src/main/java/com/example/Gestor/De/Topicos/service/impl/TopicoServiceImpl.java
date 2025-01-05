@@ -1,9 +1,7 @@
 package com.example.Gestor.De.Topicos.service.impl;
 
 import com.example.Gestor.De.Topicos.dto.TopicoRequestDTO;
-import com.example.Gestor.De.Topicos.model.Curso;
 import com.example.Gestor.De.Topicos.model.Topico;
-import com.example.Gestor.De.Topicos.model.Usuario;
 import com.example.Gestor.De.Topicos.repository.CursoRepository;
 import com.example.Gestor.De.Topicos.repository.TopicoRepository;
 import com.example.Gestor.De.Topicos.repository.UsuarioRepository;
@@ -65,18 +63,26 @@ public class TopicoServiceImpl implements TopicoService {
     }
 
     @Override
-    public Topico actualizarTopico(Long id, TopicoRequestDTO dto) {
-        Topico topico = obtenerTopicoPorId(id);
+    public TopicoRequestDTO actualizarTopico(Long id, TopicoRequestDTO dto) {
+        // Busca el tópico existente por ID
+        Topico topico = topicoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Tópico no encontrado."));
 
-        topico.setTitulo(dto.getTitulo());
-        topico.setMensaje(dto.getMensaje());
-        topico.setAutor(usuarioRepository.findById(dto.getAutorId())
+        // Actualiza los campos del tópico
+        topico.setTitulo(dto.titulo());
+        topico.setMensaje(dto.mensaje());
+        /*topico.setAutor(usuarioRepository.findById(dto.autorId())
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado.")));
-        topico.setCurso(cursoRepository.findById(dto.getCursoId())
+        topico.setCurso(cursoRepository.findById(dto.cursoId())
                 .orElseThrow(() -> new IllegalArgumentException("Curso no encontrado.")));
+*/
+        // Guarda los cambios en la base de datos
+        Topico topicoActualizado = topicoRepository.save(topico);
 
-        return topicoRepository.save(topico);
+        return dto;
     }
+
+
 
     @Override
     public void eliminarTopico(Long id) {

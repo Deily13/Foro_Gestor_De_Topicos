@@ -10,6 +10,6 @@ public interface TopicoService {
     Topico crearTopico(TopicoRequestDTO dto);
     List<Topico> obtenerTodosLosTopicos();
     Topico obtenerTopicoPorId(Long id);
-    Topico actualizarTopico(Long id, TopicoRequestDTO dto);
+    TopicoRequestDTO actualizarTopico(Long id, TopicoRequestDTO dto);
     void eliminarTopico(Long id);
 }
