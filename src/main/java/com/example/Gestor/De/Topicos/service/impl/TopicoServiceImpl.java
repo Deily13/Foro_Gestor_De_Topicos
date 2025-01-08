@@ -1,6 +1,7 @@
 package com.example.Gestor.De.Topicos.service.impl;
 
 import com.example.Gestor.De.Topicos.dto.TopicoRequestDTO;
+import com.example.Gestor.De.Topicos.dto.TopicoResponseDTO;
 import com.example.Gestor.De.Topicos.model.Curso;
 import com.example.Gestor.De.Topicos.model.Topico;
 import com.example.Gestor.De.Topicos.model.Usuario;
@@ -68,9 +69,21 @@ public class TopicoServiceImpl implements TopicoService {
     }
 
     @Override
-    public Topico obtenerTopicoPorId(Long id) {
-        return topicoRepository.findById(id)
+    public TopicoResponseDTO obtenerTopicoPorId(Long id) {
+        // Buscar el tópico por ID
+        Topico topico = topicoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Tópico no encontrado."));
+
+        // Mapear el modelo Topico al DTO TopicoResponseDTO
+        return new TopicoResponseDTO(
+                topico.getId(),
+                topico.getTitulo(),
+                topico.getMensaje(),
+                topico.getFechaCreacion(),
+                topico.getStatus(),
+                topico.getAutor().getNombre(), // Asumiendo que Usuario tiene un atributo 'nombre'
+                topico.getCurso().getNombre()  // Asumiendo que Curso tiene un atributo 'nombre'
+        );
     }
 
     @Override

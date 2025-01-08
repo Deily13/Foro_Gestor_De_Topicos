@@ -2,6 +2,7 @@ package com.example.Gestor.De.Topicos.controller;
 
 
 import com.example.Gestor.De.Topicos.dto.TopicoRequestDTO;
+import com.example.Gestor.De.Topicos.dto.TopicoResponseDTO;
 import com.example.Gestor.De.Topicos.model.Topico;
 import com.example.Gestor.De.Topicos.service.TopicoService;
 import jakarta.validation.Valid;
@@ -36,8 +37,9 @@ public class ControllerTopicos {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Topico> obtenerTopicoPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(topicoService.obtenerTopicoPorId(id));
+    public ResponseEntity<TopicoResponseDTO> obtenerTopicoPorId(@PathVariable Long id) {
+        TopicoResponseDTO respuesta = topicoService.obtenerTopicoPorId(id);
+        return ResponseEntity.ok(respuesta);
     }
 
     @PutMapping("/{id}")

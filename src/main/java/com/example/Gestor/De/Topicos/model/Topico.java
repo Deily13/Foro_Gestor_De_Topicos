@@ -14,7 +14,6 @@ import java.util.List;
 @Entity(name = "Topico")
 @Setter
 @Getter
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
