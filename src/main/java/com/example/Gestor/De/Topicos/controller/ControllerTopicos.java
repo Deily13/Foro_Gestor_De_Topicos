@@ -5,12 +5,14 @@ import com.example.Gestor.De.Topicos.dto.TopicoRequestDTO;
 import com.example.Gestor.De.Topicos.model.Topico;
 import com.example.Gestor.De.Topicos.service.TopicoService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 public class ControllerTopicos {
@@ -28,8 +30,9 @@ public class ControllerTopicos {
     }
 
     @GetMapping
-    public ResponseEntity<List<Topico>> obtenerTodosLosTopicos() {
-        return ResponseEntity.ok(topicoService.obtenerTodosLosTopicos());
+    public Page<TopicoRequestDTO> obtenerTodosLosTopicos(
+        @PageableDefault(size = 10, sort = "fechaCreacion", direction = Sort.Direction.ASC) Pageable pageable) {
+            return topicoService.obtenerTodosLosTopicos(pageable);
     }
 
     @GetMapping("/{id}")

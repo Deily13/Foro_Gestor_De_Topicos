@@ -1,19 +1,22 @@
 package com.example.Gestor.De.Topicos.model;
 
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Table(name = "topicos")
 @Entity(name = "Topico")
-@Getter
 @Setter
-@NoArgsConstructor
+@Getter
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Topico {
 
@@ -42,4 +45,5 @@ public class Topico {
         @OneToMany(mappedBy = "topico")
         private List<Respuesta> respuestas;
 
-    }
+
+}
