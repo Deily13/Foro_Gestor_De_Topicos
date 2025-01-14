@@ -11,6 +11,6 @@ public interface TopicoService {
     Topico crearTopico(TopicoRequestDTO dto);
     Page<TopicoRequestDTO> obtenerTodosLosTopicos(Pageable pageable);
     TopicoResponseDTO obtenerTopicoPorId(Long id);
-    TopicoRequestDTO actualizarTopico(Long id, TopicoRequestDTO dto);
+    Topico actualizarTopico(Long id, Boolean status);
     void eliminarTopico(Long id);
 }

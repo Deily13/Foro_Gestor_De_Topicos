@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class TopicoServiceImpl implements TopicoService {
 
@@ -81,30 +83,23 @@ public class TopicoServiceImpl implements TopicoService {
     }
 
     @Override
-    public TopicoRequestDTO actualizarTopico(Long id, TopicoRequestDTO dto) {
-        // Busca el tópico existente por ID
-        Topico topico = topicoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Tópico no encontrado."));
+    public Topico actualizarTopico(Long id, Boolean status)
+    {Topico topico = topicoRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Tópico no encontrado"));
 
-        // Actualiza los campos del tópico
-        topico.setTitulo(dto.titulo());
-        topico.setMensaje(dto.mensaje());
-        topico.setAutor(usuarioRepository.findById(dto.autorId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado.")));
-        topico.setCurso(cursoRepository.findById(dto.cursoId())
-                .orElseThrow(() -> new IllegalArgumentException("Curso no encontrado.")));
+        // Solo actualizar el estado
+        topico.setStatus(String.valueOf(status));
 
-        // Guarda los cambios en la base de datos
-        Topico topicoActualizado = topicoRepository.save(topico);
-
-        return dto;
+        // Guardar el tópico actualizado en la base de datos
+        return topicoRepository.save(topico);
     }
-
 
 
     @Override
     public void eliminarTopico(Long id) {
         topicoRepository.deleteById(id);
     }
+
+
 }
 

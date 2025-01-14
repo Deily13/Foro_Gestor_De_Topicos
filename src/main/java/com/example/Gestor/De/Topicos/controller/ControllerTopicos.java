@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/topicos")
 public class ControllerTopicos {
@@ -32,8 +34,8 @@ public class ControllerTopicos {
 
     @GetMapping
     public Page<TopicoRequestDTO> obtenerTodosLosTopicos(
-        @PageableDefault(size = 10, sort = "fechaCreacion", direction = Sort.Direction.ASC) Pageable pageable) {
-            return topicoService.obtenerTodosLosTopicos(pageable);
+            @PageableDefault(size = 10, sort = "fechaCreacion", direction = Sort.Direction.ASC) Pageable pageable) {
+        return topicoService.obtenerTodosLosTopicos(pageable);
     }
 
     @GetMapping("/{id}")
@@ -42,10 +44,13 @@ public class ControllerTopicos {
         return ResponseEntity.ok(respuesta);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<TopicoRequestDTO> actualizarTopico(@PathVariable Long id, @Valid @RequestBody TopicoRequestDTO dto) {
-        return ResponseEntity.ok(topicoService.actualizarTopico(id, dto));
+    @PutMapping("/{id}/status")
+    public ResponseEntity<Topico> actualizarTopico(@PathVariable Long id, @RequestBody Map<String, Boolean> status)  {
+        Topico topicoActualizado = topicoService.actualizarTopico(id, status.get ("status"));
+        return ResponseEntity.ok(topicoActualizado);
     }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarTopico(@PathVariable Long id) {
