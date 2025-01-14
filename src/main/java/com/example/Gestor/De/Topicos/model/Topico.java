@@ -32,17 +32,17 @@ public class Topico {
         @NotNull
         private LocalDateTime fechaCreacion = LocalDateTime.now();
 
-        @NotBlank
-        private String status;
+        private String status = String.valueOf(true);
 
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "autor_id", nullable = false)
         private Usuario autor;
 
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "curso_id", nullable = false)
         private Curso curso;
 
-        @OneToMany(mappedBy = "topico")
+        @OneToMany(mappedBy = "topico", cascade = CascadeType.ALL, orphanRemoval = true)
         private List<Respuesta> respuestas;
-
 
 }

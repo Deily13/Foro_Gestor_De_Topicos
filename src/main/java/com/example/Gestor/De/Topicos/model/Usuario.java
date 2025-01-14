@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -28,5 +30,8 @@ public class Usuario {
 
     @NotBlank
     private String contrasena;
+
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Topico> topicos;
 
 }

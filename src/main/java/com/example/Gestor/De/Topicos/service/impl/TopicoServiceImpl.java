@@ -26,33 +26,26 @@ public class TopicoServiceImpl implements TopicoService {
         this.cursoRepository = cursoRepository;
     }
 
-
     @Override
-    public Topico crearTopico(TopicoRequestDTO dto) {
-        // Verifica si el tópico ya existe basado en el título y el mensaje
-        if (topicoRepository.existsByTituloAndMensaje(dto.titulo(), dto.mensaje())) {
-            throw new IllegalArgumentException("Tópico duplicado.");
-        }
+    public Topico crearTopico(TopicoRequestDTO request) {
 
-        // Busca el autor por ID, lanza excepción si no se encuentra
-        Usuario autor = usuarioRepository.findById(dto.autorId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado."));
+        Usuario autor = usuarioRepository.findById(request.autorId())
+                .orElseThrow(() -> new IllegalArgumentException("Autor no encontrado"));
 
-        // Busca el curso por ID, lanza excepción si no se encuentra
-        Curso curso = cursoRepository.findById(dto.cursoId())
-                .orElseThrow(() -> new IllegalArgumentException("Curso no encontrado."));
-        // Crea un nuevo tópico y asigna los valores
+        Curso curso = cursoRepository.findById(request.cursoId())
+                .orElseThrow(() -> new IllegalArgumentException("Curso no encontrado"));
+
+
         Topico topico = new Topico();
-        topico.setTitulo(dto.titulo());
-        topico.setMensaje(dto.mensaje());
+        topico.setTitulo(request.titulo());
+        topico.setMensaje(request.mensaje());
         topico.setAutor(autor);
         topico.setCurso(curso);
 
-        // Guarda el tópico en el repositorio y lo retorna
         return topicoRepository.save(topico);
     }
 
-    /**
+/**
      * @param pageable
      * @return
      */
@@ -63,6 +56,7 @@ public class TopicoServiceImpl implements TopicoService {
         return topicosPaginados.map(topico -> new TopicoRequestDTO(
                 topico.getTitulo(),
                 topico.getMensaje(),
+                topico.getStatus(),
                 topico.getAutor().getId(),
                 topico.getCurso().getId()
         ));

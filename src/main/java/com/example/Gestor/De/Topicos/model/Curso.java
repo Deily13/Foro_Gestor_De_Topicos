@@ -1,14 +1,13 @@
 package com.example.Gestor.De.Topicos.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,5 +25,8 @@ public class Curso {
 
     @NotBlank
     private String categoria;
+
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Topico> topicos;
 
 }

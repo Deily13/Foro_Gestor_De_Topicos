@@ -1,10 +1,12 @@
 CREATE TABLE topicos (
-                         id SERIAL PRIMARY KEY, -- Llave primaria numérica autoincremental
-                         titulo VARCHAR(255) NOT NULL, -- Título del tópico
-                         mensaje TEXT NOT NULL, -- Mensaje del tópico
-                         fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Fecha de creación con un valor por defecto
-                         status BOOLEAN DEFAULT TRUE NOT NULL, -- Estado del tópico: activo (TRUE) o desactivado (FALSE)
-                         autor VARCHAR(100) NOT NULL, -- Autor del tópico
-                         curso VARCHAR(100) NOT NULL, -- Curso relacionado
-                         respuestas JSONB -- Respuestas en formato JSON (puedes ajustar si necesitas otro tipo)
+                         id SERIAL PRIMARY KEY,
+                         titulo VARCHAR(255) NOT NULL,
+                         mensaje TEXT NOT NULL,
+                         fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                         status BOOLEAN DEFAULT TRUE NOT NULL,
+                         autor_id BIGINT NOT NULL, -- Cambiado a autor_id para hacer referencia a la clave primaria de usuarios
+                         curso_id BIGINT NOT NULL, -- Cambiado a curso_id para hacer referencia a la clave primaria de cursos
+                         respuestas JSONB,
+                         CONSTRAINT fk_autor FOREIGN KEY (autor_id) REFERENCES usuario(id), -- Clave foránea para autor
+                         CONSTRAINT fk_curso FOREIGN KEY (curso_id) REFERENCES curso(id) -- Clave foránea para curso
 );

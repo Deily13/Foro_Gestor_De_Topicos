@@ -12,10 +12,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
+@RequestMapping("/topicos")
 public class ControllerTopicos {
 
     private final TopicoService topicoService;
@@ -25,9 +25,9 @@ public class ControllerTopicos {
     }
 
     @PostMapping
-    public ResponseEntity<Topico> crearTopico(@Valid @RequestBody TopicoRequestDTO dto) {
-        Topico topico = topicoService.crearTopico(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(topico);
+    public ResponseEntity<Topico> crearTopico(@Valid @RequestBody TopicoRequestDTO topicoRequestDTO) {
+        Topico topicoCreado = topicoService.crearTopico(topicoRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(topicoCreado);
     }
 
     @GetMapping
