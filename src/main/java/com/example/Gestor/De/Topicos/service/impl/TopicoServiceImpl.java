@@ -13,7 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class TopicoServiceImpl implements TopicoService {
@@ -30,6 +30,11 @@ public class TopicoServiceImpl implements TopicoService {
 
     @Override
     public Topico crearTopico(TopicoRequestDTO request) {
+
+        boolean topicoDuplicado = topicoRepository.existsByTituloAndMensaje(request.titulo(), request.mensaje());
+        if (topicoDuplicado) {
+            throw new IllegalArgumentException("Ya existe un tópico con el mismo título y mensaje.");
+        }
 
         Usuario autor = usuarioRepository.findById(request.autorId())
                 .orElseThrow(() -> new IllegalArgumentException("Autor no encontrado"));
@@ -77,17 +82,22 @@ public class TopicoServiceImpl implements TopicoService {
                 topico.getMensaje(),
                 topico.getFechaCreacion(),
                 topico.getStatus(),
-                topico.getAutor().getNombre(), // Asumiendo que Usuario tiene un atributo 'nombre'
-                topico.getCurso().getNombre()  // Asumiendo que Curso tiene un atributo 'nombre'
+                topico.getAutor().getNombre(),
+                topico.getCurso().getNombre()
         );
     }
 
     @Override
-    public Topico actualizarTopico(Long id, Boolean status)
-    {Topico topico = topicoRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Tópico no encontrado"));
+    public Topico actualizarTopico(Long id, Boolean status) {
+        Optional<Topico> optionalTopico = topicoRepository.findById(id);
+
+        if (!optionalTopico.isPresent()) {
+            throw new IllegalArgumentException("Tópico no encontrado.");
+        }
+
 
         // Solo actualizar el estado
+       Topico topico = optionalTopico.get();
         topico.setStatus(String.valueOf(status));
 
         // Guardar el tópico actualizado en la base de datos
@@ -97,6 +107,12 @@ public class TopicoServiceImpl implements TopicoService {
 
     @Override
     public void eliminarTopico(Long id) {
+        Optional<Topico> optionalTopico = topicoRepository.findById(id);
+
+        if (!optionalTopico.isPresent()) {
+            throw new IllegalArgumentException("Tópico no encontrado.");
+        }
+
         topicoRepository.deleteById(id);
     }
 
