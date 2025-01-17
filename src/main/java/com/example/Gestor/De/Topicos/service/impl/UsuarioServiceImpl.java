@@ -1,12 +1,12 @@
 package com.example.Gestor.De.Topicos.service.impl;
 
-import com.example.Gestor.De.Topicos.dto.TopicoRequestDTO;
-import com.example.Gestor.De.Topicos.model.Curso;
-import com.example.Gestor.De.Topicos.model.Topico;
 import com.example.Gestor.De.Topicos.model.Usuario;
 import com.example.Gestor.De.Topicos.repository.UsuarioRepository;
 import com.example.Gestor.De.Topicos.service.UsuarioService;
+
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -26,4 +26,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         return usuarioRepository.save(usuario);
     }
+
+    @Override
+    public Optional<Usuario> findByUsername(String username) {
+        return Optional.empty();
+    }
+
+
 }

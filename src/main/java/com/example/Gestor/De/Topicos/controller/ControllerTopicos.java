@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/topicos")
+@RequestMapping("/api/topicos")
 public class ControllerTopicos {
 
     private final TopicoService topicoService;
