@@ -8,8 +8,10 @@ import com.example.Gestor.De.Topicos.model.Usuario;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/login")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -28,14 +30,20 @@ public class AuthController {
         this.tokenService = tokenService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity autenticarUsuario(@RequestBody @Valid LoginRequest loginRequest) {
+    @PostMapping
+    public ResponseEntity<?> autenticarUsuario(@RequestBody @Valid LoginRequest loginRequest) {
         Authentication authToken = new UsernamePasswordAuthenticationToken(
                 loginRequest.correoElectronico(),
                 loginRequest.contrasena()
         );
-        var usuarioAutenticado = authenticationManager.authenticate(authToken);
-        var jwtToken = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
+
+        Authentication authentication = authenticationManager.authenticate(authToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Obtener el usuario autenticado y generar el token
+        Usuario usuarioAutenticado = (Usuario) authentication.getPrincipal();
+        var jwtToken = tokenService.generarToken(usuarioAutenticado);
+
         return ResponseEntity.ok( new DatosJWTToken(jwtToken));
 
 
