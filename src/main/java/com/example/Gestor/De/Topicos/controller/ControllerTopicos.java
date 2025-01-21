@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/topicos")
+@RequestMapping("/topicos")
 public class ControllerTopicos {
 
     private final TopicoService topicoService;
@@ -37,6 +37,7 @@ public class ControllerTopicos {
             @PageableDefault(size = 10, sort = "fechaCreacion", direction = Sort.Direction.ASC) Pageable pageable) {
         return topicoService.obtenerTodosLosTopicos(pageable);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<TopicoResponseDTO> obtenerTopicoPorId(@PathVariable Long id) {

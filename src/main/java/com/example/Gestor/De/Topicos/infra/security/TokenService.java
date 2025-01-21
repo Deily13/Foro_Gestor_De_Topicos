@@ -24,45 +24,67 @@ public class TokenService {
     @PostConstruct
     public void init() {
         // Verificar que el valor se inyectó correctamente
-        System.out.println("Secreto JWT al iniciar el servicio: " + apiSecret);
+
     }
 
     public String generarToken(Usuario usuario) {
 
-        try{
+        try {
+            System.out.println("Secreto JWT al iniciar el servicio: " + apiSecret);
             Algorithm algorithm = Algorithm.HMAC256(apiSecret);
-            return JWT.create()
-                    .withIssuer("gestor de topicos")
-                    .withSubject(usuario.getCorreoElectronico())
-                    .withClaim("contrasena", usuario.getContrasena())
-                    .withExpiresAt(generarFechaExpiracion())
-                    .sign(algorithm);
-        }catch (JWTCreationException exception) {
-            throw new RuntimeException();
+            String token = JWT.create()
+                    .withIssuer("gestor de topicos") // Issuer del token
+                    .withSubject(usuario.getCorreoElectronico()) // Subject (correo electrónico)
+                    .withClaim("contrasena", usuario.getContrasena()) // Campo opcional
+                    .withExpiresAt(generarFechaExpiracion()) // Fecha de expiración
+                    .sign(algorithm); // Firmar el token con el algoritmo y clave secreta
+
+            // Imprime el token generado
+            System.out.println("Token generado: " + token);
+
+            return token;
+        } catch (JWTCreationException exception) {
+            throw new RuntimeException("Error al generar el token", exception);
         }
-
-
     }
 
     public String getSubject(String token) {
-
-        DecodedJWT verifier = null;
-
         try {
-            Algorithm algorithm = Algorithm.HMAC256(apiSecret);
-            verifier = JWT.require(algorithm)
-                    .withIssuer("gestor de topicos")
+            // Log para verificar que la clave secreta es correcta
+            System.out.println("Clave secreta: " + apiSecret);
+
+            // Decodificar y verificar el token
+            Algorithm algorithm = Algorithm.HMAC256(apiSecret); // Usa la clave secreta proporcionada
+            DecodedJWT verifier = JWT.require(algorithm)
+                    .withIssuer("gestor de topicos") // Define el emisor esperado
                     .build()
-                    .verify(token);
-            return verifier.getSubject();
+                    .verify(token); // Verifica el token
+
+            // Verifica si el sujeto (sub) no es nulo
+            String subject = verifier.getSubject();
+            if (subject == null) {
+                // Si no se encuentra un sujeto válido, lanza una excepción
+                throw new RuntimeException("El token no contiene un sujeto válido");
+            }
+
+            // Log para confirmar que el sujeto fue extraído correctamente
+            System.out.println("Sujeto extraído: " + subject);
+
+            // Devuelve el sujeto (correo electrónico, username, etc.)
+            return subject;
+
         } catch (JWTVerificationException exception) {
-            System.out.println(exception.toString());
+            // Log para capturar errores relacionados con la validación del token
+            System.out.println("Error al procesar el token: " + exception.getMessage());
+            return null;
+
+        } catch (IllegalArgumentException exception) {
+            // Log para capturar errores generales, como argumentos inválidos
+            System.out.println("Error con el token o la clave secreta: " + exception.getMessage());
+            return null;
         }
-        if (verifier.getSubject() == null) {
-            throw new RuntimeException("Verifier invalido");
-        }
-        return verifier.getSubject();
     }
+
 
     public Instant generarFechaExpiracion() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-05:00"));

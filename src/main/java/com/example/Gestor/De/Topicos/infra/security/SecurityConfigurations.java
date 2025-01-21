@@ -1,7 +1,5 @@
 package com.example.Gestor.De.Topicos.infra.security;
 
-import jakarta.servlet.Filter;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,9 +17,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfigurations {
 
-    private final Filter securityFilter;
+    private final SecurityFilter securityFilter;
 
-    public SecurityConfigurations(@Qualifier("securityFilter") Filter securityFilter) {
+    public SecurityConfigurations(SecurityFilter securityFilter) {
         this.securityFilter = securityFilter;
     }
 

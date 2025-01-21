@@ -6,6 +6,7 @@ import com.example.Gestor.De.Topicos.service.UsuarioService;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,5 +33,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         return Optional.empty();
     }
 
+    @Override
+    public List<Usuario> obtenerTodosLosUsuarios() {
+        return usuarioRepository.findAll();
+    }
 
 }
